@@ -1,3 +1,4 @@
+import sys
 import pygame
 from constants import *
 from player import *
@@ -29,19 +30,24 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
-        for obj in updatable:
-            obj.update(dt)
-        for obj in asteroids:
-            if player.collide(obj):
+            
+        updatable.update(dt)
+
+        for asteroid in asteroids:
+            if player.collide(asteroid):
                 print("Game over!")
-                raise SystemExit()
+                sys.exit()
+
             for shot in shots:
-                if obj.collide(shot):
-                    obj.kill()
+                if asteroid.collide(shot):
+                    asteroid.kill()
                     shot.kill()
-        screen.fill("black")        
+
+        screen.fill("black") 
+
         for obj in drawable:
             obj.draw(screen)
+
         pygame.display.flip()
         #Limit Framerate
         dt = clock.tick(framerate) / 1000
